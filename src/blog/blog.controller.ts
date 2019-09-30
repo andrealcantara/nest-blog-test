@@ -1,6 +1,6 @@
 import { Controller, Get, Res, HttpStatus, Param, Post, Body, Put, Query, NotFoundException, Delete } from '@nestjs/common';
 import { BlogService } from './blog.service';
-import { ValidateObjectID } from '../shared/pipes/validate-object-id.pipes';
+import { ValidateObjectId } from './shared/pipes/validate-object-id.pipes';
 import { CreatePostDTO } from './dto/create-post.dto';
 import { POINT_CONVERSION_HYBRID } from 'constants';
 
@@ -17,7 +17,7 @@ export class BlogController {
 
     
     @Get('post/:postID')
-    async getPost(@Res() res, @Param('postID', new ValidateObjectID())postID){
+    async getPost(@Res() res, @Param('postID', new ValidateObjectId())postID){
         const post = await this.blogSerivce.getPost(postID);
         return res.status(HttpStatus.OK).json(post);
     }
@@ -34,7 +34,7 @@ export class BlogController {
     @Put("/edit")
     async editPost(
         @Res() res,
-        @Query('postID', new ValidateObjectID()) postID,
+        @Query('postID', new ValidateObjectId()) postID,
         @Body() createPostDTO : CreatePostDTO ) {
             const editPost = await this.blogSerivce.editPost(postID, createPostDTO);
             if(!editPost) throw new NotFoundException("Post não encontrado");
@@ -46,7 +46,7 @@ export class BlogController {
 
     @Delete()
     async deletePost(@Res() res, 
-    @Query('postID', new ValidateObjectID()) postID ){
+    @Query('postID', new ValidateObjectId()) postID ){
         const deletePost = this.blogSerivce.deletePost(postID);
         if(!postID) throw new NotFoundException("Post não encontrado");
         return res.status(HttpStatus.OK).json({
